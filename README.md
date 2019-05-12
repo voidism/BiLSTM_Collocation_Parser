@@ -25,7 +25,7 @@ python colloc_parser.py write -model_name vn_model.ckpt -in_file in.txt -out_fil
 ```bash
 python colloc_parser.py [mode(執行模式)"print" or "write" -> print是全部印出來，write是寫進去檔案裡] 
         -model_name [model檔案名稱] 
-        -in_file [要parse的檔案名稱] 
+        -in_file [要parse的檔案名稱，內容是一行一句話，需斷好詞，詞之間以空白分隔] 
         -out_file [要write的檔案名稱，若選print模式可不填] 
         -prefix [pair的詞性1及詞性2，用"_"隔開, ex:"nf_n"] 
         -timing [要不要幫你算預計執行時間(True or False)，default: True，
@@ -132,6 +132,8 @@ python colloc_parser.py [mode(執行模式)請打"train"]
 變成：`有 一 個f1 邊長n2 7 公分f2 的 正 方體 粉筆盒n1`  
 
 如果有共用的情形發生，就在字尾繼續附加上去即可，如下面的："市值n1n2"，編號順序也不會影響parse結果
+
+之後在訓練時，只要有給定好`-prefix f_n`，程式就會以f跟n當prefix來parse你的data。
 
 ```
 有 77 枝f1 牛奶 冰棒n1 和 12 枝f2 花生 冰棒n2
