@@ -5,12 +5,13 @@ import matplotlib.font_manager as mfm
 import numpy as np
 import itertools
 import os
+import re
 
 
-def plot_confusion_matrix(cm, classes, target_mat, bar, bar_target,
+def plot_confusion_matrix(cm, classes, target_mat, bar, bar_target, save_dir,
                           normalize=False,
                           title='Confusion matrix',
-                          cmap="Blues", sv=False, sg=0):
+                          cmap="Blues", sv=False, sub_list="<>:'\"/\\|?*"):
     """
     This function prints and plots the confusion matrix.
     Normalization can be applied by setting `normalize=True`.
@@ -59,11 +60,13 @@ def plot_confusion_matrix(cm, classes, target_mat, bar, bar_target,
                  color=cor)
     plt.yticks(tick_marks, classes,
                fontproperties=prop)
+    substrings = sorted(list(sub_list), key=len, reverse=True)
+    gex = re.compile('|'.join(map(re.escape, substrings)))
+    img_name = gex.sub('_',''.join(classes))
     if sv:
-        emb = 'skip_gram' if sg else 'CBOW'
-        if not os.path.exists('./dependency_graphs'):
-            os.makedirs('./dependency_graphs')
-        plt.savefig('./dependency_graphs/{}_{}.png'.format(''.join(classes), emb))
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+        plt.savefig(os.path.join(save_dir, '{}.png'.format(img_name)))
     else:
         plt.show()
     plt.clf()
